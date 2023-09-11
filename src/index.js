@@ -1,6 +1,7 @@
 import { monkey } from './monkey';
 import { observer } from './observer';
 export { unblock } from './unblock';
+import {willBeUnblocked} from './checks';
 
 export function init() {
     // Starts the monitoring
@@ -13,14 +14,33 @@ export function init() {
 
 export function openCookiesDialog(dialog_selector) {
     let dialog = document.querySelector(dialog_selector);
-    if(dialog){
+    if(!dialog.open){
         dialog.showModal();
     }
 }
 
 export function closeCookiesDialog(dialog_selector) {
     let dialog = document.querySelector(dialog_selector);
-    if(dialog){
+    if(dialog.open){
         dialog.close();
     }
+}
+
+export function initializeOptions() {
+    let target_element_container = document.querySelector('#cookie_content');
+    let scripts = document.querySelectorAll('script');
+
+    scripts.forEach((script, index) => {
+        let label = document.createElement('label');
+        let option = document.createElement('input');
+        option.type = 'checkbox';
+        option.className = 'cookie-option';
+        option.value = script.src || index + 1;
+        if(willBeUnblocked(script)){
+            option.setAttribute('checked','checked');
+        }
+        label.appendChild(option);
+        label.append(index + 1);
+        target_element_container.appendChild(label);
+    });
 }
