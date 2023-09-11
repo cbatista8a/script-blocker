@@ -10,3 +10,17 @@ export function init() {
     });
     monkey();
 }
+
+export function openCookiesDialog(dialog_selector) {
+    let dialog = document.querySelector(dialog_selector);
+    if(dialog){
+        dialog.showModal();
+    }
+}
+
+export function closeCookiesDialog(dialog_selector) {
+    let dialog = document.querySelector(dialog_selector);
+    if(dialog){
+        dialog.close();
+    }
+}
