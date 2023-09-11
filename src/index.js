@@ -26,6 +26,7 @@ export function closeCookiesDialog(dialog_selector) {
     }
 }
 
+//Todo implement state save for scripts on session storage
 export function initializeOptions() {
     let target_element_container = document.querySelector('#cookie_content');
     let scripts = document.querySelectorAll('script');
