@@ -35,9 +35,3 @@ export const observer = new MutationObserver(mutations => {
         }
     }
 })
-
-// Starts the monitoring
-observer.observe(document.documentElement, {
-    childList: true,
-    subtree: true
-})
