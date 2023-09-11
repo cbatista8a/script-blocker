@@ -36,11 +36,15 @@ button.primary:hover {
   transform: translateY(-5px);
 }
     </style>
+    <script>
+      window.YETT_BLACKLIST = [];
+      window.YETT_WHITELIST = [];
+    </script>
   </head>
   <body>
     <div id="app">
-      <button class="primary" onclick="openCookiesDialog('#cookie_dialog');">Open Dialog</button>
     </div>
+    <button class="primary" onclick="openCookiesDialog('#cookie_dialog');">Open Dialog</button>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
