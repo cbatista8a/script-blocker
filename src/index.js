@@ -3,6 +3,10 @@ import { observer } from "./observer";
 export { unblock } from "./unblock";
 import { willBeUnblocked } from "./checks";
 import { scriptsArray, STATUS_BLOCKED, STATUS_UNBLOCKED, Script, STORAGE_NAME } from "./variables";
+import {generateSHA256Hash, verifyHash} from './hasher';
+import { getAvailableStorage } from "./storage";
+
+
 
 export function init() {
   // Starts the monitoring
@@ -11,53 +15,41 @@ export function init() {
     subtree: true,
   });
   monkey();
-}
 
-export function openCookiesDialog() {
-  let dialog = document.querySelector("#cookie_dialog");
-  if (!dialog.open) {
-    dialog.showModal();
-  }
-}
-
-export function closeCookiesDialog() {
-  let dialog = document.querySelector("#cookie_dialog");
-  if (dialog.open) {
-    dialog.close();
-  }
+  initializeOptions();
 }
 
 //Todo implement state save for scripts on session storage
-export function initializeOptions() {
+function initializeOptions() {
   let target_element_container = document.querySelector("#cookie_content");
   let scripts = document.querySelectorAll("script");
   const storage = getAvailableStorage();
-  scriptsArray = JSON.parse(storage.getItem(STORAGE_NAME)) || [];
-  scripts.forEach((script, index) => {
+  let user_preferences = JSON.parse(storage.getItem(STORAGE_NAME)) || [];
+  scripts.forEach(async (script, index) => {
+    const script_id = await generateSHA256Hash(script.outerHTML);
     let status = STATUS_BLOCKED;
+
     let label = document.createElement("label");
     let option = document.createElement("input");
     option.type = "checkbox";
     option.className = "cookie-option";
-    option.value = script.src || index + 1;
-    if (willBeUnblocked(script)) {
-      option.setAttribute("checked", "checked");
+    option.value = script_id;
+
+    if(script_id in user_preferences){
+        status = user_preferences[script_id].status;
+    }else if (willBeUnblocked(script)){
       status = STATUS_UNBLOCKED;
     }
+
+    status == STATUS_UNBLOCKED ? option.setAttribute("checked", "checked") : option.setAttribute("checked", null);
     label.appendChild(option);
-    label.append(index + 1); // TODO set user friendly name
+    label.append(script_id); // TODO set user friendly name
     target_element_container.appendChild(label);
 
-    scriptsArray[index] = new Script(option.value, index, status);
-    storage.setItem(STORAGE_NAME, JSON.stringify(scriptsArray));
+    user_preferences[script_id] = new Script(script_id, status);
   });
+  debugger;
+  storage.setItem(STORAGE_NAME, JSON.stringify(user_preferences));
 }
 
-export function getAvailableStorage() {
-  try {
-    return window.localStorage ? window.localStorage : window.sessionStorage;
-  } catch (e) {
-    alert("Browser Storage not available and we don\'t able to handle user preferences for cookies");
-  }
-  return null;
-}
+

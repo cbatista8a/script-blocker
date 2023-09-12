@@ -1,9 +1,8 @@
 
-import {init,unblock,openCookiesDialog,closeCookiesDialog, initializeOptions} from './src/index';
+import {init,unblock} from './src/index';
+import { openCookiesDialog, closeCookiesDialog } from "./src/modal-dialog";
 import dialog_modal from './src/dialog.html?raw';
 import styles from './src/style.css';
-
-init();
 
 let cookie_dialog = document.createElement('div');
 cookie_dialog.id = 'cookie_container';
@@ -14,4 +13,4 @@ document.querySelector('body').appendChild(cookie_dialog);
 window.openCookiesDialog = openCookiesDialog;
 window.closeCookiesDialog = closeCookiesDialog;
 
-initializeOptions();
+init();
