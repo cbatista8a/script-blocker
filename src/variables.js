@@ -16,9 +16,8 @@ export const backupScripts = {
 export let scriptsArray = [];
 
 export class Script {
-    constructor(src, position, status) {
-        this.src = src;
-        this.position = position;
+    constructor(id, status) {
+        this.id = id;
         this.status = status;
     }
 
