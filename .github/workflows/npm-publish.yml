@@ -10,13 +10,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event_name == 'release'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: npm ci
-      - run: npm i
       - run: npm run build
       - run: npm test
 
@@ -30,7 +30,6 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm i
       - run: npm run build
       - run: npm publish
         env:
