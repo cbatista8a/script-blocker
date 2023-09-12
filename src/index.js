@@ -12,15 +12,15 @@ export function init() {
     monkey();
 }
 
-export function openCookiesDialog(dialog_selector) {
-    let dialog = document.querySelector(dialog_selector);
+export function openCookiesDialog() {
+    let dialog = document.querySelector('#cookie_dialog');
     if(!dialog.open){
         dialog.showModal();
     }
 }
 
-export function closeCookiesDialog(dialog_selector) {
-    let dialog = document.querySelector(dialog_selector);
+export function closeCookiesDialog() {
+    let dialog = document.querySelector('#cookie_dialog');
     if(dialog.open){
         dialog.close();
     }
