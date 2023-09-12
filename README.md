@@ -56,7 +56,7 @@ Open a pull request on GitHub.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE.md) file for more details.
+This project is licensed under the Apache 2.0 License. See the [LICENSE](./LICENSE.md) file for more details.
 
 ## Author
 
