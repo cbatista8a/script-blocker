@@ -20,12 +20,13 @@ export function init() {
 }
 
 //Todo implement state save for scripts on session storage
-function initializeOptions() {
+async function initializeOptions() {
   let target_element_container = document.querySelector("#cookie_content");
   let scripts = document.querySelectorAll("script");
   const storage = getAvailableStorage();
-  let user_preferences = JSON.parse(storage.getItem(STORAGE_NAME)) || [];
-  scripts.forEach(async (script, index) => {
+  let user_preferences = JSON.parse(storage.getItem(STORAGE_NAME)) || {};
+
+  for (const script of scripts) {
     const script_id = await generateSHA256Hash(script.outerHTML);
     let status = STATUS_BLOCKED;
 
@@ -37,7 +38,7 @@ function initializeOptions() {
 
     if(script_id in user_preferences){
         status = user_preferences[script_id].status;
-    }else if (willBeUnblocked(script)){
+    } else if (willBeUnblocked(script)){
       status = STATUS_UNBLOCKED;
     }
 
@@ -45,10 +46,10 @@ function initializeOptions() {
     label.appendChild(option);
     label.append(script_id); // TODO set user friendly name
     target_element_container.appendChild(label);
-
+    
     user_preferences[script_id] = new Script(script_id, status);
-  });
-  debugger;
+  }
+
   storage.setItem(STORAGE_NAME, JSON.stringify(user_preferences));
 }
 
