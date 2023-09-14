@@ -16,7 +16,10 @@ export function init() {
   });
   monkey();
 
-  initializeOptions();
+  document.addEventListener('DOMContentLoaded', function() {
+    observer.disconnect();
+    initializeOptions();
+  });
 }
 
 //Todo implement state save for scripts on session storage
