@@ -39,7 +39,7 @@ async function initializeOptions() {
       status = STATUS_UNBLOCKED;
     }
 
-    status == STATUS_UNBLOCKED ? option.setAttribute("checked", "checked") : option.setAttribute("checked", null);
+    status == STATUS_UNBLOCKED ? option.setAttribute("checked", "checked") : null;
     label.appendChild(option);
     label.append(script_id); // TODO set user friendly name
     target_element_container.appendChild(label);
