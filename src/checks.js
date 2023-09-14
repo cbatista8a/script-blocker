@@ -1,5 +1,6 @@
-import { patterns, TYPE_ATTRIBUTE, user_preferences } from "./variables";
+import { patterns, TYPE_ATTRIBUTE } from "./variables";
 import { generateSHA256Hash } from "./hasher";
+import {getConfig as user_preferences} from './storage';
 
 function isOnBlacklist(src) {
   return (

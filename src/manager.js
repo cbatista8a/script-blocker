@@ -1,4 +1,5 @@
-import { backupScripts, TYPE_ATTRIBUTE } from "./variables";
+import { backupScripts, TYPE_ATTRIBUTE, STATUS_BLOCKED, STATUS_UNBLOCKED } from "./variables";
+import {getConfig as user_preferences, saveConfig} from './storage';
 
 export function unblock(hash) {
   if (hash in backupScripts) {
@@ -6,11 +7,11 @@ export function unblock(hash) {
     const scriptNode = document.createElement("script");
     scriptNode.outerHTML = blockedScript;
 
-    document.querySelector('footer').appendChild(scriptNode);
+    document.querySelector('footer')?.appendChild(scriptNode);
 
     if (hash in user_preferences) {
       user_preferences[hash].status = STATUS_UNBLOCKED;
-      storage.setItem(STORAGE_NAME, JSON.stringify(user_preferences));
+      saveConfig(user_preferences);
     }
 
     delete backupScripts[hash];
@@ -26,6 +27,8 @@ export function blockScript(hash, node) {
 
   // Remove the node from the DOM
   node.parentElement?.removeChild(node);
+  user_preferences[hash].status = STATUS_BLOCKED;
+  saveConfig(user_preferences);
 }
 
 function preventExecutionFirefox(node) {

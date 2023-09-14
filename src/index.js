@@ -9,7 +9,7 @@ import {
   STORAGE_NAME,
 } from "./variables";
 import { generateSHA256Hash } from "./hasher";
-import { getAvailableStorage } from "./storage";
+import { saveConfig } from "./storage";
 
 import { openCookiesDialog, closeCookiesDialog } from "./modal-handler";
 import dialog_modal from "./dialog.html?raw";
@@ -42,7 +42,6 @@ export function init() {
 async function initializeOptions() {
   let target_element_container = document.querySelector("#cookie_content");
   let scripts = document.querySelectorAll("script");
-  const storage = getAvailableStorage();
   let user_preferences = {};
   for (const script of scripts) {
     const script_id = await generateSHA256Hash(script.outerHTML);
@@ -65,5 +64,5 @@ async function initializeOptions() {
     user_preferences[script_id] = new Script(script_id, status);
   }
 
-  storage.setItem(STORAGE_NAME, JSON.stringify(user_preferences));
+  saveConfig(user_preferences);
 }
