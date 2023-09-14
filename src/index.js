@@ -2,7 +2,7 @@ import { monkey } from "./monkey";
 import { observer } from "./observer";
 export { unblock } from "./unblock";
 import { willBeUnblocked } from "./checks";
-import { scriptsArray, STATUS_BLOCKED, STATUS_UNBLOCKED, Script, STORAGE_NAME } from "./variables";
+import { user_preferences, STATUS_BLOCKED, STATUS_UNBLOCKED, Script, STORAGE_NAME } from "./variables";
 import {generateSHA256Hash, verifyHash} from './hasher';
 import { getAvailableStorage } from "./storage";
 
@@ -24,7 +24,6 @@ async function initializeOptions() {
   let target_element_container = document.querySelector("#cookie_content");
   let scripts = document.querySelectorAll("script");
   const storage = getAvailableStorage();
-  let user_preferences = JSON.parse(storage.getItem(STORAGE_NAME)) || {};
 
   for (const script of scripts) {
     const script_id = await generateSHA256Hash(script.outerHTML);

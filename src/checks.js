@@ -1,4 +1,5 @@
 import { patterns, TYPE_ATTRIBUTE } from './variables'
+import { getAvailableStorage } from "./storage";
 
 export const isOnBlacklist = (src, type) => (
     src &&
