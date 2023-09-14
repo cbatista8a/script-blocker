@@ -5,7 +5,7 @@ import {
 } from './variables'
 
 import {
-    willBeUnblocked
+    shouldBlockScript
 } from './checks'
 
 import {
@@ -58,7 +58,7 @@ export const unblock = function(...scriptUrlsOrRegexes) {
     const tags = document.querySelectorAll(`script[type="${TYPE_ATTRIBUTE}"]`)
     for(let i = 0; i < tags.length; i++) {
         const script = tags[i]
-        if(willBeUnblocked(script)) {
+        if(!shouldBlockScript(script)) {
             backupScripts.blacklisted.push([script, 'application/javascript'])
             script.parentElement.removeChild(script)
         }
@@ -67,7 +67,7 @@ export const unblock = function(...scriptUrlsOrRegexes) {
     // Exclude 'whitelisted' scripts from the blacklist and append them to <head>
     let indexOffset = 0;
     [...backupScripts.blacklisted].forEach(([script, type], index) => {
-        if(willBeUnblocked(script)) {
+        if(!shouldBlockScript(script)) {
             const scriptNode = document.createElement('script')
             for(let i = 0; i < script.attributes.length; i++) {
                 let attribute = script.attributes[i]

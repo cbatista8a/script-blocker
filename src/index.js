@@ -1,7 +1,7 @@
 import { monkey } from "./monkey";
 import { observer } from "./observer";
 export { unblock } from "./unblock";
-import { willBeUnblocked } from "./checks";
+import { shouldBlockScript } from "./checks";
 import { user_preferences, STATUS_BLOCKED, STATUS_UNBLOCKED, Script, STORAGE_NAME } from "./variables";
 import {generateSHA256Hash, verifyHash} from './hasher';
 import { getAvailableStorage } from "./storage";
@@ -35,9 +35,7 @@ async function initializeOptions() {
     option.className = "cookie-option";
     option.value = script_id;
 
-    if(script_id in user_preferences){
-        status = user_preferences[script_id].status;
-    } else if (willBeUnblocked(script)){
+    if (!shouldBlockScript(script)){
       status = STATUS_UNBLOCKED;
     }
 

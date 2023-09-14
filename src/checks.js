@@ -1,4 +1,5 @@
 import { patterns, TYPE_ATTRIBUTE, user_preferences } from "./variables";
+import { generateSHA256Hash } from "./hasher";
 
 function isOnBlacklist(src) {
   return (
@@ -15,17 +16,14 @@ function isOnWhiteList(src) {
 }
 
 export const shouldBlockScript = async function (script) {
-  const src = script.getAttribute("src");
-  const type = script.getAttribute("type");
   const scriptId = await generateSHA256Hash(script.outerHTML);
 
-  const userScript = user_preferences.find(
-    (scriptObj) => scriptObj.id === scriptId
-  );
-
-  if (userScript) {
-    return userScript.isBlocked();
+  if (scriptId in user_preferences) {
+    return user_preferences[scriptId].isBlocked();
   }
+
+  const src = script.getAttribute("src");
+  const type = script.getAttribute("type");
 
   if (isOnWhiteList(src) || (type !== TYPE_ATTRIBUTE && !isOnBlacklist(src))) {
     return false;
