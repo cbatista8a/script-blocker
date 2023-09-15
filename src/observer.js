@@ -7,7 +7,7 @@ import { addUiOption } from "./ui";
 async function handleAddedScript(node) {
   const script_id = await generateSHA256Hash(node.outerHTML);
   node.setAttribute("id", script_id);
-  const script_name = node.getAttribute('data-name') || '';
+  const script_name = node.dataset.name || node.src ? 'External' : 'Internal';
   let status = STATUS_UNBLOCKED;
   if (shouldBlockScript(script_id, node)) {
     blockScript(script_id, node);
