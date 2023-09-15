@@ -7,7 +7,7 @@ import {
 import { generateSHA256Hash } from "./hasher";
 import { saveConfig } from "./storage";
 
-//Todo implement state save for scripts on session storage
+
 export async function initializeOptions() {
   let target_element_container = document.querySelector("#cookie_content");
   let scripts = document.querySelectorAll("script");
@@ -22,7 +22,7 @@ export async function initializeOptions() {
     option.className = "cookie-option";
     option.value = script_id;
 
-    if (!shouldBlockScript(script)) {
+    if (!shouldBlockScript(script_id, script)) {
       status = STATUS_UNBLOCKED;
       option.setAttribute("checked", "checked");
     }

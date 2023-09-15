@@ -12,10 +12,10 @@ export function monkey() {
   // Monkey patch the createElement method to prevent dynamic scripts from executing
   document.createElement = function (...args) {
     // If this is not a script tag, bypass
-    if (args[0].toLowerCase() !== "script")
-      return createElementBackup.bind(document)(...args);
-
     const scriptElt = createElementBackup.bind(document)(...args);
+    if (args[0].toLowerCase() !== "script") {
+      return scriptElt;
+    }
 
     // Define getters / setters to ensure that the script type is properly set
     try {

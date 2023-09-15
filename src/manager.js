@@ -1,25 +1,24 @@
 import { backupScripts, TYPE_ATTRIBUTE, STATUS_BLOCKED, STATUS_UNBLOCKED } from "./variables";
 import {getConfig as user_preferences, saveConfig} from './storage';
 
-export function unblock(hash) {
-  if (hash in backupScripts) {
-    const blockedScript = backupScripts[hash];
+export function unblock(script_id) {
+  if (script_id in backupScripts) {
     const scriptNode = document.createElement("script");
-    scriptNode.outerHTML = blockedScript;
+    scriptNode.outerHTML = backupScripts[script_id];
 
     document.querySelector('footer')?.appendChild(scriptNode);
 
-    if (hash in user_preferences) {
-      user_preferences[hash].status = STATUS_UNBLOCKED;
+    if (script_id in user_preferences) {
+      user_preferences[script_id].status = STATUS_UNBLOCKED;
       saveConfig(user_preferences);
     }
 
-    delete backupScripts[hash];
+    delete backupScripts[script_id];
   }
 }
 
-export function blockScript(hash, node) {
-  backupScripts[hash] = node;
+export function blockScript(id, node) {
+  backupScripts[id] = node;
   node.type = TYPE_ATTRIBUTE;
 
   // Firefox event listener
@@ -27,7 +26,7 @@ export function blockScript(hash, node) {
 
   // Remove the node from the DOM
   node.parentElement?.removeChild(node);
-  user_preferences[hash].status = STATUS_BLOCKED;
+  user_preferences[id].status = STATUS_BLOCKED;
   saveConfig(user_preferences);
 }
 

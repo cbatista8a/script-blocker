@@ -1,5 +1,4 @@
 import { patterns, TYPE_ATTRIBUTE } from "./variables";
-import { generateSHA256Hash } from "./hasher";
 import {getConfig as user_preferences} from './storage';
 
 function isOnBlacklist(src) {
@@ -16,11 +15,10 @@ function isOnWhiteList(src) {
   );
 }
 
-export const shouldBlockScript = async function (script) {
-  const scriptId = await generateSHA256Hash(script.outerHTML);
-
-  if (scriptId in user_preferences) {
-    return user_preferences[scriptId].isBlocked();
+export const shouldBlockScript = async function (id, script) {
+  
+  if (id in user_preferences) {
+    return user_preferences[id].isBlocked();
   }
 
   const src = script.getAttribute("src");
