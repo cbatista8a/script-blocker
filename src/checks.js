@@ -1,5 +1,5 @@
 import { patterns, TYPE_ATTRIBUTE } from "./variables";
-import {getConfig as user_preferences} from './storage';
+import {getConfig} from './storage';
 
 function isOnBlacklist(src) {
   return (
@@ -16,7 +16,7 @@ function isOnWhiteList(src) {
 }
 
 export const shouldBlockScript = async function (id, script) {
-  
+  let user_preferences = getConfig();
   if (id in user_preferences) {
     return user_preferences[id].isBlocked();
   }

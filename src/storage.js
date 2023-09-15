@@ -16,10 +16,10 @@ export function saveConfig(user_preferences) {
 }
 
 export function getConfig() {
-  const raw_storage = JSON.parse(getAvailableStorage().getItem(STORAGE_NAME)) || {};
-  let config = {};
-  for (const script in raw_storage) {
-    config.push(new Script(script.id, script.status));
+  let raw_storage = JSON.parse(getAvailableStorage().getItem(STORAGE_NAME)) || {};
+  for (const script_id in raw_storage) {
+    const script = raw_storage[script_id];
+    raw_storage[script_id] = new Script(script_id, script.status);
   }
-  return config;
+  return raw_storage;
 }

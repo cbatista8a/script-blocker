@@ -1,5 +1,5 @@
-import { backupScripts, TYPE_ATTRIBUTE, STATUS_BLOCKED, STATUS_UNBLOCKED } from "./variables";
-import {getConfig as user_preferences, saveConfig} from './storage';
+import { backupScripts, TYPE_ATTRIBUTE, STATUS_BLOCKED, STATUS_UNBLOCKED, Script } from "./variables";
+import {getConfig, saveConfig} from './storage';
 
 export function unblock(script_id) {
   if (script_id in backupScripts) {
@@ -7,6 +7,8 @@ export function unblock(script_id) {
     scriptNode.outerHTML = backupScripts[script_id];
 
     document.querySelector('footer')?.appendChild(scriptNode);
+
+    let user_preferences = getConfig();
 
     if (script_id in user_preferences) {
       user_preferences[script_id].status = STATUS_UNBLOCKED;
@@ -26,7 +28,14 @@ export function blockScript(id, node) {
 
   // Remove the node from the DOM
   node.parentElement?.removeChild(node);
-  user_preferences[id].status = STATUS_BLOCKED;
+
+  let user_preferences = getConfig();
+
+  if (id in user_preferences) {
+    user_preferences[id].status = STATUS_BLOCKED;
+  }else{
+    user_preferences[id] = new Script(id,STATUS_BLOCKED);
+  }
   saveConfig(user_preferences);
 }
 
