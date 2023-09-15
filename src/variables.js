@@ -1,6 +1,6 @@
 export const TYPE_ATTRIBUTE = "javascript/blocked";
-export const STATUS_BLOCKED = 1;
-export const STATUS_UNBLOCKED = 0;
+export const STATUS_BLOCKED = 'blocked';
+export const STATUS_UNBLOCKED = 'unblocked';
 export const STORAGE_NAME = "scripts-config";
 export const MODAL_CONTAINER_ID = "cookie_container";
 
