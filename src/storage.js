@@ -23,3 +23,5 @@ export function getConfig() {
   }
   return raw_storage;
 }
+
+export let user_preferences = getConfig();
