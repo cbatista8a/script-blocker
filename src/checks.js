@@ -1,12 +1,5 @@
 import { patterns, TYPE_ATTRIBUTE } from "./variables";
-import {getConfig} from './storage';
-
-function isOnBlacklist(src) {
-  return (
-    patterns.blacklist &&
-    patterns.blacklist.some((pattern) => pattern.test(src))
-  );
-}
+import {user_preferences} from './storage';
 
 function isOnWhiteList(src) {
   return (
@@ -15,18 +8,17 @@ function isOnWhiteList(src) {
   );
 }
 
-export const shouldBlockScript = async function (id, script) {
-  let user_preferences = getConfig();
+export function shouldBlockScript (id, node) {
   if (id in user_preferences) {
     return user_preferences[id].isBlocked();
   }
 
-  const src = script.getAttribute("src");
-  const type = script.getAttribute("type");
+  const src = node.getAttribute("src");
+  const type = node.getAttribute("type");
 
-  if (isOnWhiteList(src) || (type !== TYPE_ATTRIBUTE && !isOnBlacklist(src))) {
+  if ((type !== TYPE_ATTRIBUTE && isOnWhiteList(src))) {
     return false;
   }
 
   return true;
-};
+}
