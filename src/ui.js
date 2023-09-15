@@ -1,37 +1,32 @@
-import { shouldBlockScript } from "./checks";
+import { saveConfig, user_preferences } from "./storage";
 import {
   STATUS_BLOCKED,
-  STATUS_UNBLOCKED,
-  Script
-} from "./variables";
-import { generateSHA256Hash } from "./hasher";
-import { saveConfig } from "./storage";
+  STATUS_UNBLOCKED} from "./variables";
 
 
-export async function initializeOptions() {
+export function addUiOption(script_id, status, script_name = '') {
   let target_element_container = document.querySelector("#cookie_content");
-  let scripts = document.querySelectorAll("script");
-  let user_preferences = {};
-  for (const script of scripts) {
-    const script_id = await generateSHA256Hash(script.outerHTML);
-    let status = STATUS_BLOCKED;
-
-    let label = document.createElement("label");
-    let option = document.createElement("input");
-    option.type = "checkbox";
-    option.className = "cookie-option";
-    option.value = script_id;
-
-    if (!shouldBlockScript(script_id, script)) {
-      status = STATUS_UNBLOCKED;
-      option.setAttribute("checked", "checked");
+  let label = document.createElement("label");
+  let option = document.createElement("input");
+  option.type = "checkbox";
+  option.className = "cookie-option";
+  option.value = script_id;
+  option.addEventListener('change',function(event){
+    const script_id = this.value;
+    if(script_id in user_preferences){
+      user_preferences[script_id].status = user_preferences[script_id].status === STATUS_UNBLOCKED ? STATUS_BLOCKED : STATUS_UNBLOCKED;
+      saveConfig(user_preferences);
     }
-    label.appendChild(option);
-    label.append(script_id); // TODO set user friendly name
-    target_element_container.appendChild(label);
+  });
 
-    user_preferences[script_id] = new Script(script_id, status);
+  if (status === STATUS_UNBLOCKED) {
+    option.setAttribute("checked", true);
   }
 
-  saveConfig(user_preferences);
+  label.appendChild(option);
+  label.append(script_name ? script_name : script_id); // TODO set user friendly name
+  target_element_container.appendChild(label);
 }
+
+
+
